@@ -1,26 +1,13 @@
 import nodemailer from 'nodemailer';
 
-// Create transporter based on environment
+// Create transporter using Gmail SMTP
 const createTransporter = () => {
-  // For development/testing - use Gmail SMTP
-  if (process.env.NODE_ENV === 'development' || !process.env.AWS_REGION) {
-    console.log('[EMAIL] Using Gmail SMTP for email sending');
-    return nodemailer.createTransporter({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD // Use App Password, not regular password
-      }
-    });
-  }
-  
-  // For production - use AWS SES
-  console.log('[EMAIL] Using AWS SES for email sending');
-  return nodemailer.createTransporter({
-    SES: {
-      region: process.env.AWS_REGION,
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  console.log('[EMAIL] Using Gmail SMTP for email sending');
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_APP_PASSWORD // Use App Password, not regular password
     }
   });
 };
@@ -30,8 +17,8 @@ export const sendEmail = async (to: string, subject: string, body: string) => {
   console.log('[EMAIL] Subject:', subject);
   
   // Check if email is configured
-  if (!process.env.GMAIL_USER && !process.env.SES_EMAIL) {
-    console.warn('[EMAIL] No email service configured — printing email to console instead of sending');
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+    console.warn('[EMAIL] Gmail credentials not configured — printing email to console instead of sending');
     console.log('EMAIL TO:', to);
     console.log('SUBJECT:', subject);
     console.log('BODY:', body);
@@ -42,7 +29,7 @@ export const sendEmail = async (to: string, subject: string, body: string) => {
     const transporter = createTransporter();
     
     const mailOptions = {
-      from: process.env.GMAIL_USER || process.env.SES_EMAIL,
+      from: process.env.GMAIL_USER,
       to: to,
       subject: subject,
       text: body,

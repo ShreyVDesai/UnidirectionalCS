@@ -34,7 +34,10 @@ app.get('/api/test-scheduler', async (req, res) => {
     });
   } catch (err) {
     console.error('[TEST] Scheduler test error:', err);
-    res.status(500).json({ error: 'Scheduler test failed', details: err.message });
+    res.status(500).json({ 
+      error: 'Scheduler test failed', 
+      details: err instanceof Error ? err.message : 'Unknown error' 
+    });
   }
 });
 

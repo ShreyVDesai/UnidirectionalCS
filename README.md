@@ -42,11 +42,11 @@ A web-based system where users register as Type A (Requesters) or Type B (Respon
 
    This will create a `.env` file with default values. You can modify it as needed.
 
-4. **Email Setup (Optional)**:
+4. **Email Setup (Recommended)**:
 
-   - **For Gmail**: Add your Gmail credentials to `.env` (see `EMAIL_SETUP_GUIDE.md`)
-   - **For AWS SES**: Configure AWS credentials for production
+   - **For Gmail**: Add your Gmail credentials to `.env` (see `GMAIL_SETUP_GUIDE.md`)
    - **For testing**: Leave email fields empty - emails will be logged to console
+   - **Free**: Gmail SMTP is free and easy to set up
 
 5. Start the backend server:
    ```bash
