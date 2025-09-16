@@ -3,26 +3,26 @@ import nodemailer from 'nodemailer';
 // Create transporter based on environment
 const createTransporter = () => {
   // For development/testing - use Gmail SMTP
-
+  if (process.env.NODE_ENV === 'development' || !process.env.AWS_REGION) {
     console.log('[EMAIL] Using Gmail SMTP for email sending');
-    return nodemailer.createTransport({
+    return nodemailer.createTransporter({
       service: 'gmail',
       auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_APP_PASSWORD // Use App Password, not regular password
       }
     });
-  
+  }
   
   // For production - use AWS SES
-//   console.log('[EMAIL] Using AWS SES for email sending');
-//   return nodemailer.createTransport({
-//     SES: {
-//       region: process.env.AWS_REGION,
-//       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-//     }
-//   });
+  console.log('[EMAIL] Using AWS SES for email sending');
+  return nodemailer.createTransporter({
+    SES: {
+      region: process.env.AWS_REGION,
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    }
+  });
 };
 
 export const sendEmail = async (to: string, subject: string, body: string) => {
