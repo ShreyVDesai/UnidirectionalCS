@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Container,
   Typography,
@@ -46,9 +46,9 @@ const DashboardB: React.FC = () => {
     }
   };
 
-  const fetchAllRequests = async () => {
+  const fetchAllRequests = useCallback(async () => {
     await Promise.all([fetchPendingRequests(), fetchAcceptedRequests()]);
-  };
+  },[]);
 
   const acceptRequest = async (id: string) => {
     try {
@@ -67,7 +67,7 @@ const DashboardB: React.FC = () => {
 
   useEffect(() => {
     fetchAllRequests();
-  }, []);
+  }, [fetchAllRequests]);
 
   if (selectedRequest) {
     return (

@@ -42,7 +42,13 @@ A web-based system where users register as Type A (Requesters) or Type B (Respon
 
    This will create a `.env` file with default values. You can modify it as needed.
 
-4. Start the backend server:
+4. **Email Setup (Optional)**:
+
+   - **For Gmail**: Add your Gmail credentials to `.env` (see `EMAIL_SETUP_GUIDE.md`)
+   - **For AWS SES**: Configure AWS credentials for production
+   - **For testing**: Leave email fields empty - emails will be logged to console
+
+5. Start the backend server:
    ```bash
    npm run dev
    ```

@@ -42,6 +42,20 @@ const DashboardA: React.FC = () => {
     }
   };
 
+  const testScheduler = async () => {
+    try {
+      console.log("[DASHBOARD A] Testing scheduler");
+      const response = await api.get("/test-scheduler");
+      console.log("[DASHBOARD A] Scheduler test successful:", response.data);
+      alert(
+        `Scheduler test completed!\n\nResults:\n- Pending requests: ${response.data.result.pendingRequests}\n- Expired requests: ${response.data.result.expiredRequests}\n- Messages deleted: ${response.data.result.messagesDeleted}`
+      );
+    } catch (err: any) {
+      console.error("[DASHBOARD A] Scheduler test failed:", err);
+      alert("Scheduler test failed!");
+    }
+  };
+
   const createRequest = async () => {
     console.log("[DASHBOARD A] Create request button clicked");
     setIsCreating(true);
@@ -94,6 +108,14 @@ const DashboardA: React.FC = () => {
         sx={{ mt: 2, mr: 2 }}
       >
         Test Backend
+      </Button>
+      <Button
+        variant="contained"
+        color="warning"
+        onClick={testScheduler}
+        sx={{ mt: 2, mr: 2 }}
+      >
+        Test Scheduler
       </Button>
       <Button
         variant="contained"

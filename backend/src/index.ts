@@ -21,6 +21,23 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend is working!', timestamp: new Date().toISOString() });
 });
 
+// Test scheduler endpoint
+app.get('/api/test-scheduler', async (req, res) => {
+  try {
+    console.log('[TEST] Manual scheduler trigger requested');
+    const { runScheduledTasks } = await import('./utils/scheduler');
+    const result = await runScheduledTasks();
+    res.json({ 
+      message: 'Scheduler test completed', 
+      result,
+      timestamp: new Date().toISOString() 
+    });
+  } catch (err) {
+    console.error('[TEST] Scheduler test error:', err);
+    res.status(500).json({ error: 'Scheduler test failed', details: err.message });
+  }
+});
+
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/requests', requestRoutes);

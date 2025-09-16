@@ -12,8 +12,17 @@ if (!fs.existsSync(envPath)) {
   
   const defaultEnv = `MONGO_URI=mongodb://localhost:27017/unidirectional-comm
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+
+# Email Configuration (Gmail for development)
+GMAIL_USER=your-gmail@gmail.com
+GMAIL_APP_PASSWORD=your-gmail-app-password
+
+# AWS Configuration (for production)
 AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=your-aws-access-key
+AWS_SECRET_ACCESS_KEY=your-aws-secret-key
 SES_EMAIL=your-verified-email@example.com
+
 PORT=3000
 NODE_ENV=development`;
 
