@@ -15,6 +15,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Test endpoint
+app.get('/api/test', (req, res) => {
+  console.log('[TEST] Test endpoint called');
+  res.json({ message: 'Backend is working!', timestamp: new Date().toISOString() });
+});
+
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/requests', requestRoutes);
@@ -30,8 +36,12 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Backend listening on port ${PORT}`);
+  console.log(`[SERVER] Backend listening on port ${PORT}`);
+  console.log(`[SERVER] Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`[SERVER] JWT_SECRET configured: ${process.env.JWT_SECRET ? 'Yes' : 'No'}`);
+  console.log(`[SERVER] MONGO_URI configured: ${process.env.MONGO_URI ? 'Yes' : 'No'}`);
 });
 
 // start scheduler (runs the cron tasks)
+console.log('[SERVER] Starting scheduler...');
 import './utils/scheduler';

@@ -1,8 +1,16 @@
 // src/pages/Messaging.tsx
-import React, { useState, useEffect } from 'react';
-import { Container, Typography, TextField, Button, List, ListItem, ListItemText } from '@mui/material';
-import api from '../api';
-import { Request, Message } from '../types';
+import React, { useState, useEffect } from "react";
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
+import api from "../api";
+import { Request, Message } from "../types";
 
 interface MessagingProps {
   request: Request;
@@ -11,25 +19,37 @@ interface MessagingProps {
 
 const Messaging: React.FC<MessagingProps> = ({ request, onBack }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
 
   const fetchMessages = async () => {
     try {
+      console.log("[MESSAGING] Fetching messages for request:", request._id);
       const res = await api.get(`/messages/${request._id}`);
+      console.log("[MESSAGING] Messages received:", res.data);
       setMessages(res.data);
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      console.error("[MESSAGING] Error fetching messages:", err);
+      console.error("[MESSAGING] Error response:", err.response?.data);
     }
   };
 
   const sendMessage = async () => {
     if (!text) return;
     try {
-      await api.post(`/messages/${request._id}`, { content: text });
-      setText('');
+      console.log("[MESSAGING] Sending message:", {
+        requestId: request._id,
+        content: text,
+      });
+      const response = await api.post("/messages", {
+        requestId: request._id,
+        content: text,
+      });
+      console.log("[MESSAGING] Message sent successfully:", response.data);
+      setText("");
       fetchMessages();
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      console.error("[MESSAGING] Error sending message:", err);
+      console.error("[MESSAGING] Error response:", err.response?.data);
     }
   };
 
@@ -50,7 +70,9 @@ const Messaging: React.FC<MessagingProps> = ({ request, onBack }) => {
         {messages.map((msg) => (
           <ListItem key={msg._id}>
             <ListItemText
-              primary={`${typeof msg.from === 'string' ? msg.from : msg.from.username}: ${msg.content}`}
+              primary={`${
+                typeof msg.from === "string" ? msg.from : msg.from.username
+              }: ${msg.content}`}
               secondary={new Date(msg.createdAt).toLocaleString()}
             />
           </ListItem>

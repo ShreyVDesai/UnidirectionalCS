@@ -39,11 +39,24 @@ Thanks.`;
       }
     }
 
-    // 2) Cleanup: delete messages older than 1 hour
+    // 2) Cleanup: delete Type A messages older than 1 hour
     const cutoff = new Date(Date.now() - RESPONSE_WINDOW_MINUTES * 60 * 1000);
-    const delRes = await MessageModel.deleteMany({ createdAt: { $lte: cutoff } });
-    if (delRes.deletedCount && delRes.deletedCount > 0) {
-      console.log(`[scheduler] deleted ${delRes.deletedCount} expired messages`);
+    
+    // Find requests that were accepted more than 1 hour ago
+    const expiredRequests = await RequestModel.find({
+      acceptedAt: { $lte: cutoff },
+      acceptedBy: { $ne: null }
+    });
+    
+    // Delete messages from Type A users for these expired requests
+    for (const req of expiredRequests) {
+      const delRes = await MessageModel.deleteMany({
+        requestId: req._id,
+        from: req.from // Only delete messages from Type A (the requester)
+      });
+      if (delRes.deletedCount && delRes.deletedCount > 0) {
+        console.log(`[scheduler] deleted ${delRes.deletedCount} expired Type A messages for request ${req._id}`);
+      }
     }
   } catch (err) {
     console.error('[scheduler] error', err);

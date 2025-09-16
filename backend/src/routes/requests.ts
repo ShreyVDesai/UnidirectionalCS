@@ -7,15 +7,27 @@ const router = Router();
 
 // Type A creates a request
 router.post('/', auth, async (req: Request, res: Response) => {
+  console.log('[CREATE REQUEST] Starting request creation');
   const user = req.user;
-  if (!user) return res.status(401).json({ error: 'Not authenticated' });
-  if (user.type !== 'A') return res.status(403).json({ error: 'Only Type A can send requests' });
+  console.log('[CREATE REQUEST] User:', user);
+  
+  if (!user) {
+    console.log('[CREATE REQUEST] No user found - not authenticated');
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+  
+  if (user.type !== 'A') {
+    console.log('[CREATE REQUEST] User type is not A:', user.type);
+    return res.status(403).json({ error: 'Only Type A can send requests' });
+  }
 
   try {
+    console.log('[CREATE REQUEST] Creating request for user:', user.id);
     const reqDoc = await RequestModel.create({ from: user.id });
+    console.log('[CREATE REQUEST] Request created successfully:', reqDoc);
     return res.status(201).json({ message: 'Request created', request: reqDoc });
   } catch (err) {
-    console.error('create request error', err);
+    console.error('[CREATE REQUEST] Error creating request:', err);
     return res.status(500).json({ error: 'Server error' });
   }
 });
@@ -67,6 +79,23 @@ router.get('/sent', auth, async (req: Request, res: Response) => {
     return res.json(sent);
   } catch (err) {
     console.error('sent error', err);
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Type B: view accepted requests (requests they accepted)
+router.get('/accepted', auth, async (req: Request, res: Response) => {
+  const user = req.user;
+  if (!user) return res.status(401).json({ error: 'Not authenticated' });
+  if (user.type !== 'B') return res.status(403).json({ error: 'Only Type B can view accepted' });
+
+  try {
+    console.log('[ACCEPTED REQUESTS] Fetching accepted requests for user:', user.id);
+    const accepted = await RequestModel.find({ acceptedBy: user.id }).populate('from', 'username email');
+    console.log('[ACCEPTED REQUESTS] Found accepted requests:', accepted.length);
+    return res.json(accepted);
+  } catch (err) {
+    console.error('[ACCEPTED REQUESTS] Error fetching accepted requests:', err);
     return res.status(500).json({ error: 'Server error' });
   }
 });

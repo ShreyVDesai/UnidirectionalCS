@@ -4,6 +4,7 @@
   "description": "POC backend for unidirectional comm system (TypeScript)",
   "main": "dist/index.js",
   "scripts": {
+    "setup": "node setup-env.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
