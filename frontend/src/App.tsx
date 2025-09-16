@@ -1,25 +1,28 @@
+// src/App.tsx
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/Login';
-import Register from './components/Register';
-import DashboardA from './components/DashboardA';
-import DashboardB from './components/DashboardB';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 const App: React.FC = () => {
-  const token = localStorage.getItem('token');
-  const userType = localStorage.getItem('type');
-
-  if (!token) return <Routes>
-    <Route path="/login" element={<Login />} />
-    <Route path="/register" element={<Register />} />
-    <Route path="*" element={<Navigate to="/login" replace />} />
-  </Routes>;
-
-  return <Routes>
-    {userType === 'A' && <Route path="/" element={<DashboardA />} />}
-    {userType === 'B' && <Route path="/" element={<DashboardB />} />}
-    <Route path="*" element={<Navigate to="/" replace />} />
-  </Routes>;
+  return (
+    <AuthProvider>
+      
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          
+          {/* Private routes */}
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<Home />} />
+          </Route>
+        </Routes>
+      
+    </AuthProvider>
+  );
 };
 
 export default App;

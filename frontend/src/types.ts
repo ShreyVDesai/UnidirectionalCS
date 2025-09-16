@@ -1,26 +1,21 @@
-export type UserType = 'A' | 'B';
-
 export interface User {
   _id: string;
-  username: string;
   email: string;
-  type: UserType;
+  type: 'A' | 'B';
+  username?: string;
 }
 
 export interface Request {
   _id: string;
-  from: User;
-  acceptedBy?: User;
+  from: User | string;
+  acceptedBy?: User | string;
   acceptedAt?: string;
-  responded: boolean;
-  createdAt: string;
+  responded?: boolean;
 }
 
 export interface Message {
   _id: string;
-  requestId: string;
   from: User | string;
-  to: User | string;
   content: string;
   createdAt: string;
 }
