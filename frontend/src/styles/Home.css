@@ -1,0 +1,66 @@
+/* ===== Home Page ===== */
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 60px;
+  text-align: center;
+}
+
+.home h1 {
+  font-size: 3rem;
+  color: #222;
+}
+
+.home p {
+  font-size: 1.3rem;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* ===== Feature Cards Grid ===== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 in a row */
+  gap: 1.5rem;
+  margin: 50px auto;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+/* Card styling */
+.feature-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Emoji */
+.feature-card .emoji {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
