@@ -73,22 +73,6 @@ connectDB();
 
 ```env
 # MongoDB Connection
-MONGO_URI=mongodb://localhost:27017/unidirectional-comm
-
-# Alternative formats:
-# MONGO_URI=mongodb://username:password@localhost:27017/unidirectional-comm
-# MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/unidirectional-comm
-```
-
-## 🔧 **Environment Configuration**
-
-### **Environment File Setup**
-
-**File**: `setup-env.js`
-
-### **Purpose**
-
-Creates a default `.env` file with configuration values if it doesn't exist.
 
 ### **Script Content**
 
