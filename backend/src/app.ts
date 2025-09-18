@@ -12,6 +12,15 @@ app.use(cors());
 app.use(express.json());
 
 // ===== Routes =====
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.json({ 
+    message: "CommLink Backend API is running!", 
+    status: "healthy",
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/requests", requestRoutes);
 app.use("/api/messages", messageRoutes); // ✅ keep this
